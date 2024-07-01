@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,17 +51,29 @@ fun MovieContent(
                 pagingMovies.apply {
                     when{
                         loadState.refresh is LoadState.Loading -> {
-                            this@LazyVerticalGrid.item{
+                            this@LazyVerticalGrid.item (
+                                span = {
+                                    GridItemSpan(maxLineSpan)
+                                }
+                            ){
                                 LoadingView()
                             }
                         }
                         loadState.append is LoadState.Loading -> {
-                            this@LazyVerticalGrid.item{
+                            this@LazyVerticalGrid.item(
+                                span = {
+                                    GridItemSpan(maxLineSpan)
+                                }
+                            ){
                                 LoadingView()
                             }
                         }
                         loadState.refresh is LoadState.Error -> {
-                            this@LazyVerticalGrid.item {
+                            this@LazyVerticalGrid.item(
+                                span = {
+                                    GridItemSpan(maxLineSpan)
+                                }
+                            ) {
                                 ErrorScreen(
                                     message = "Verifique sua conexão com a internet",
                                     retry = ::retry
@@ -68,7 +81,11 @@ fun MovieContent(
                             }
                         }
                         loadState.append is LoadState.Error -> {
-                            this@LazyVerticalGrid.item {
+                            this@LazyVerticalGrid.item(
+                                span = {
+                                    GridItemSpan(maxLineSpan)
+                                }
+                            ) {
                                 ErrorScreen(
                                     message = "Verifique sua conexão com a internet",
                                     retry = ::retry
