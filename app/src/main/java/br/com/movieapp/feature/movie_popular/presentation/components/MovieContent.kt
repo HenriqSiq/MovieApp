@@ -48,49 +48,49 @@ fun MovieContent(
                         }
                     )
                 }
-                pagingMovies.apply {
-                    when{
-                        loadState.refresh is LoadState.Loading -> {
-                            this@LazyVerticalGrid.item (
-                                span = {
-                                    GridItemSpan(maxLineSpan)
-                                }
-                            ){
-                                LoadingView()
+            }
+            pagingMovies.apply {
+                when{
+                    loadState.refresh is LoadState.Loading -> {
+                        item (
+                            span = {
+                                GridItemSpan(maxLineSpan)
                             }
+                        ){
+                            LoadingView()
                         }
-                        loadState.append is LoadState.Loading -> {
-                            this@LazyVerticalGrid.item(
-                                span = {
-                                    GridItemSpan(maxLineSpan)
-                                }
-                            ){
-                                LoadingView()
+                    }
+                    loadState.append is LoadState.Loading -> {
+                        item(
+                            span = {
+                                GridItemSpan(maxLineSpan)
                             }
+                        ){
+                            LoadingView()
                         }
-                        loadState.refresh is LoadState.Error -> {
-                            this@LazyVerticalGrid.item(
-                                span = {
-                                    GridItemSpan(maxLineSpan)
-                                }
-                            ) {
-                                ErrorScreen(
-                                    message = "Verifique sua conexão com a internet",
-                                    retry = ::retry
-                                )
+                    }
+                    loadState.refresh is LoadState.Error -> {
+                        item(
+                            span = {
+                                GridItemSpan(maxLineSpan)
                             }
+                        ) {
+                            ErrorScreen(
+                                message = "Verifique sua conexão com a internet",
+                                retry = ::retry
+                            )
                         }
-                        loadState.append is LoadState.Error -> {
-                            this@LazyVerticalGrid.item(
-                                span = {
-                                    GridItemSpan(maxLineSpan)
-                                }
-                            ) {
-                                ErrorScreen(
-                                    message = "Verifique sua conexão com a internet",
-                                    retry = ::retry
-                                )
+                    }
+                    loadState.append is LoadState.Error -> {
+                        item(
+                            span = {
+                                GridItemSpan(maxLineSpan)
                             }
+                        ) {
+                            ErrorScreen(
+                                message = "Verifique sua conexão com a internet",
+                                retry = ::retry
+                            )
                         }
                     }
                 }
