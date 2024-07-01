@@ -12,8 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import br.com.movieapp.core.domain.model.Movie
+import br.com.movieapp.core.presentation.components.common.ErrorScreen
+import br.com.movieapp.core.presentation.components.common.LoadingView
 
 @Composable
 fun MovieContent(
@@ -43,6 +46,36 @@ fun MovieContent(
                             onClick(movieId)
                         }
                     )
+                }
+                pagingMovies.apply {
+                    when{
+                        loadState.refresh is LoadState.Loading -> {
+                            this@LazyVerticalGrid.item{
+                                LoadingView()
+                            }
+                        }
+                        loadState.append is LoadState.Loading -> {
+                            this@LazyVerticalGrid.item{
+                                LoadingView()
+                            }
+                        }
+                        loadState.refresh is LoadState.Error -> {
+                            this@LazyVerticalGrid.item {
+                                ErrorScreen(
+                                    message = "Verifique sua conexão com a internet",
+                                    retry = ::retry
+                                )
+                            }
+                        }
+                        loadState.append is LoadState.Error -> {
+                            this@LazyVerticalGrid.item {
+                                ErrorScreen(
+                                    message = "Verifique sua conexão com a internet",
+                                    retry = ::retry
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
