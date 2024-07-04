@@ -12,6 +12,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +39,10 @@ fun SearchContent(
     onEvent: (MovieSearchEvent) -> Unit,
     onDetail: (movieId: Int) -> Unit
 ) {
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -43,7 +51,10 @@ fun SearchContent(
     ) {
         SearchComponent(
             query = query,
-            onSearch = onSearch,
+            onSearch = {
+                isLoading = true
+                onSearch(it)
+            },
             onQueryChangeEvent = onEvent,
             modifier = Modifier
                 .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -69,10 +80,11 @@ fun SearchContent(
                         }
                     )
                 }
+                isLoading = false
             }
             pagingMovies.apply {
                 when {
-                    loadState.refresh is LoadState.Loading -> {
+                    isLoading -> {
                         item(
                             span = {
                                 GridItemSpan(maxLineSpan)
@@ -83,6 +95,7 @@ fun SearchContent(
                     }
 
                     loadState.append is LoadState.Loading -> {
+                        isLoading = false
                         item(
                             span = {
                                 GridItemSpan(maxLineSpan)
@@ -93,6 +106,7 @@ fun SearchContent(
                     }
 
                     loadState.refresh is LoadState.Error -> {
+                        isLoading = false
                         item(
                             span = {
                                 GridItemSpan(maxLineSpan)
@@ -106,6 +120,7 @@ fun SearchContent(
                     }
 
                     loadState.append is LoadState.Error -> {
+                        isLoading = false
                         item(
                             span = {
                                 GridItemSpan(maxLineSpan)
