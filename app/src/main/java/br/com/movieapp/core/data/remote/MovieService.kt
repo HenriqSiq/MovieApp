@@ -22,7 +22,7 @@ interface MovieService {
     ): SearchResponse
 
     @GET("movie/{movie_id}")
-    suspend fun getMoview(
+    suspend fun getMovie(
         @Path("movie_id") movieId: Int
     ): MovieDetailResponse
 
